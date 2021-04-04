@@ -66,3 +66,6 @@ useTabs의 내용
 
 
  index는 0또는1이 되어야하고 모든 버튼은 온클릭(이벤트)를가진다. 누군가 클릭하면 우리는 index가 무엇이든지 상관없이 changeItem(index)을 실행할것이고, changeItem의 index는 index안에 있는 값인0또는 1로 바꿔준다. 그건 setCurrentIndex의 item을 바꿔줄것이다. 이것은 State를 바꿔줄거다. 그래서 currentIndex의 currentIndex를 바꿔줄것이고 모든 것을 새로고침 하는것이다. 그럼 이제 클릭하는 곳으로 가게 될것이다
+
+
+//https://velog.io/@tiahwang/%EA%B0%95%EC%9D%98%EB%85%B8%ED%8A%B8-Hooks-useState-jwcnmr99
