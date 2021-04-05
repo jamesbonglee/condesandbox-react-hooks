@@ -1,24 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
 
-const useTitle = (initialTilte) => {
-  const [title, setTitle] = useState(initialTilte);
-  const updateTitle = () => {
-    const htmlTitle = document.querySelector("title");
-    htmlTitle.innerText = title;
-  };
+const useClick = (onClick) => {
+  if (typeof onClick !== "function") {
+    return;
+  }
 
-  useEffect(updateTitle, [title]);
-  return setTitle;
+  const element = useRef();
+  useEffect(() => {
+    if (element.current) {
+      element.current.addEventListener("click", onClick);
+    }
+    return () => {
+      if (element.current) {
+        element.current.removeEventListener("click", onClick);
+      }
+    };
+  }, []);
+  return element;
 };
-//이전에도 다뤗지만 이펙트 코드 설명하자면 [title]이 변경되면 앞의함수를 실행한다.
 
 const App = () => {
-  const tilteUpdator = useTitle("loading...");
-  setTimeout(() => tilteUpdator("home"), 3000);
+  const sayHi = () => {
+    console.log("hi hello");
+  };
+  const title = useClick(sayHi);
   return (
     <div className="App">
-      <h1>Hello</h1>
+      <h1 ref={title}>Hello</h1>
     </div>
   );
 };
