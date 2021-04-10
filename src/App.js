@@ -1,31 +1,42 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
 
-const useBeforeLeave = (onBefore) => {
-  if (typeof onBefore !== "function") {
-    return;
-  }
-
-  const handle = (event) => {
-    const { clientY } = event;
-    // event 값으로 clientY값을 확인해서 0보다 작거나 같을때만 실행되게 하였기 때문에
-    // 위로 마우스가 mouseleave 되는 경우에만 실행된다
-    if (clientY <= 0) {
-      onBefore();
+const useFullscreen = (callback) => {
+  const element = useRef();
+  const triggerFull = () => {
+    if (element.current) {
+      element.current.requestFullscreen();
+      if (callback && typeof callback === "function") {
+        callback(true);
+      }
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("mouseleave", handle);
-    return () => document.removeEventListener("mouseleave", handle);
-  }, []);
+  const exitFull = () => {
+    document.exitFullscreen();
+    if (callback && typeof callback === "function") {
+      callback(false);
+    }
+  };
+
+  return { element, triggerFull, exitFull };
 };
 
 const App = () => {
-  const begForLife = () => console.log("plz don't laeve");
-  useBeforeLeave(begForLife);
+  const isFullS = (callback) => {
+    console.log(callback ? "we Full" : "we Small");
+  };
+  const { element, triggerFull, exitFull } = useFullscreen(isFullS);
   return (
-    <div className="App">
+    <div className="App" style={{ height: "1000vh" }}>
+      <div>
+        <img
+          ref={element}
+          src="http://ext.fmkorea.com/files/attach/new2/20210328/486616/923108885/3485220546/99b983892094b5c6d2fc3736e15da7d1.jpg"
+        />
+        <button onClick={exitFull}>Exit fullscreen</button>
+      </div>
+      <button onClick={triggerFull}>Make fullscreen</button>
       <h1>Hello</h1>
     </div>
   );
