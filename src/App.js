@@ -1,35 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
-
-const useNotification = (title, options) => {
-  if (!("Notification" in window)) {
-    return;
-  }
-  const fireNotif = () => {
-    if (Notification.permission !== "granted") {
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          new Notification(title, options);
-        } else {
-          return;
-        }
-      });
-    } else {
-      new Notification(title, options);
-    }
-  };
-  return fireNotif;
-  // useEffect(() => {});
-};
+import useAxios from "./useAxios";
 
 const App = () => {
-  const triggerNotif = useNotification("i love everything", {
-    body: "acutally this is lie :)"
+  const { loading, data, error, refetch } = useAxios({
+    url: "https://yts.mx/api/v2/list_movies.json"
   });
+  // console.log(
+  //   `Loading : ${loading}\nError : ${error}\ndata : ${JSON.stringify(data)}`
+  // );
   return (
     <div className="App">
-      <h1>Hello</h1>
-      <button onClick={triggerNotif}>notiF Btn</button>
+      <h1>{data && data.status}</h1>
+      <h2>{loading && "Loading"}</h2>
+      <button onClick={refetch}>refecth</button>
     </div>
   );
 };
